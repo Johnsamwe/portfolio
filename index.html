@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>John Samwel · full stack developer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    /* ---------- modern reset / system stack ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ---------- design tokens (premium calm) ---------- */
+    :root {
+      --bg: #f5f7fa;
+      --bg-card: #ffffff;
+      --text: #1e293b;
+      --text-soft: #334155;
+      --text-muted: #64748b;
+      --primary: #4f46e5;
+      --primary-strong: #4338ca;
+      --accent: #db2777;
+      --border-light: #e9edf2;
+      --border-faint: rgba(0,0,0,0.04);
+      --card-shadow: 0 15px 35px -8px rgba(0,0,0,0.07), 0 2px 6px 0 rgba(0,0,0,0.02);
+      --card-glow: 0 30px 50px -15px rgba(79,70,229,0.22);
+      --inner-radius: 20px;
+      --transition-smooth: 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0c0c15;
+      --bg-card: #171a23;
+      --text: #edf2f7;
+      --text-soft: #cbd5e1;
+      --text-muted: #8695aa;
+      --primary: #a78bfa;
+      --primary-strong: #8b5cf6;
+      --accent: #f472b6;
+      --border-light: #2a2e3a;
+      --border-faint: rgba(255,255,255,0.02);
+      --card-shadow: 0 25px 40px -15px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.02);
+      --card-glow: 0 35px 60px -15px rgba(167,139,250,0.25);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background-color 0.5s ease, color 0.3s ease;
+      font-weight: 400;
+      font-synthesis: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ---------- header with image ---------- */
+    header {
+      padding: 3rem 0 4rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 2.2rem;
+      right: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      color: var(--text-muted);
+      width: 48px;
+      height: 48px;
+      border-radius: 60px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(8px);
+      font-size: 1.25rem;
+      z-index: 10;
+    }
+
+    .theme-toggle:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: scale(1.08) rotate(8deg);
+      background: var(--bg-card);
+    }
+
+    /* profile image section */
+    .profile-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .image-frame {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--primary), var(--accent));
+      padding: 4px; /* subtle border effect */
+      box-shadow: var(--card-glow), 0 10px 25px -10px rgba(0,0,0,0.3);
+      margin-bottom: 1.5rem;
+      transition: transform 0.4s ease;
+    }
+
+    .image-frame:hover {
+      transform: scale(1.02);
+    }
+
+    .profile-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 4rem;
+      color: var(--text-muted);
+      border: 2px solid var(--bg-card);
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-image .placeholder-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2a2f3a, #1e222b);
+      color: #94a3b8;
+      font-size: 3.5rem;
+    }
+
+    [data-theme="light"] .profile-image .placeholder-icon {
+      background: linear-gradient(135deg, #e9eef3, #dbe0e8);
+      color: #6b7a8f;
+    }
+
+    h1 {
+      font-size: clamp(3.8rem, 10vw, 6rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 0.8rem;
+    }
+
+    .gradient-name {
+      background: linear-gradient(145deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+      font-weight: 350;
+      color: var(--text-soft);
+      margin-bottom: 2rem;
+      letter-spacing: -0.01em;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      color: var(--text-muted);
+      font-size: 1.8rem;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      padding: 0.3rem;
+      border-radius: 50%;
+      background: var(--bg-card);
+      width: 3.4rem;
+      height: 3.4rem;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 4px 10px -6px rgba(0,0,0,0.2);
+    }
+
+    .social-links a:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-5px);
+      background: var(--bg-card);
+    }
+
+    /* ---------- section heading ---------- */
+    h2 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      width: 80%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      bottom: -12px;
+      left: 10%;
+      border-radius: 4px;
+      opacity: 0.8;
+    }
+
+    /* ---------- about (revamped with your personal info) ---------- */
+    .about-content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .about-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--inner-radius);
+      padding: 2.5rem;
+      box-shadow: var(--card-shadow);
+      transition: box-shadow 0.3s;
+    }
+
+    .greeting {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .greeting i {
+      color: var(--primary);
+      margin-right: 0.5rem;
+    }
+
+    .role-tagline {
+      font-size: 1.3rem;
+      color: var(--primary-strong);
+      margin-bottom: 1.2rem;
+      font-weight: 450;
+    }
+
+    .about-description {
+      color: var(--text-soft);
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed var(--border-light);
+    }
+
+    .about-description p {
+      margin-bottom: 0.8rem;
+    }
+
+    /* ----- socials list (Facebook, Instagram, LinkedIn, TikTok, email) ----- */
+    .socials-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem 2rem;
+      background: var(--bg);
+      padding: 1.2rem 1.8rem;
+      border-radius: 60px;
+      margin: 1.8rem 0 2rem;
+      border: 1px solid var(--border-light);
+      justify-content: center;
+    }
+
+    .socials-list a {
+      color: var(--text-soft);
+      text-decoration: none;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .socials-list a i {
+      font-size: 1.3rem;
+      color: var(--primary);
+    }
+
+    .socials-list a:hover {
+      color: var(--primary);
+    }
+
+    .tech-stack-title {
+      font-size: 1.4rem;
+      margin: 2rem 0 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* ----- tech stack cloud (all 30+ items) ----- */
+    .tech-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      background: var(--bg);
+      padding: 1.8rem;
+      border-radius: 32px;
+      border: 1px solid var(--border-light);
+    }
+
+    .tech-item {
+      background: var(--bg-card);
+      color: var(--text);
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid var(--border-light);
+      transition: all 0.15s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+
+    .tech-item:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: scale(1.02);
+    }
+
+    /* highlight for primary calls */
+    .highlight {
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* ---------- project cards (unchanged, but keep) ---------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2.2rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 28px;
+      overflow: hidden;
+      transition: all var(--transition-smooth);
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.01);
+      border-color: var(--primary);
+      box-shadow: var(--card-glow);
+    }
+
+    .card-img {
+      height: 210px;
+      background: linear-gradient(145deg, #1e1e2f, #262b3a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-light);
+      transition: 0.2s;
+      background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 0%, transparent 30%);
+    }
+
+    [data-theme="light"] .card-img {
+      background: linear-gradient(145deg, #f0f3f8, #eef2f6);
+      color: #a0abbf;
+    }
+
+    .card-body {
+      padding: 1.8rem 2rem 2rem;
+      flex: 1;
+    }
+
+    .card h3 {
+      font-size: 1.7rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.2rem;
+    }
+
+    .tag {
+      background: var(--bg);
+      color: var(--primary);
+      padding: 0.4rem 1rem;
+      border-radius: 60px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      transition: 0.2s;
+    }
+
+    .tag:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      text-align: center;
+      padding: 4.5rem 0 3rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      border-top: 1px solid var(--border-light);
+      margin-top: 2rem;
+    }
+
+    /* ---------- media queries ---------- */
+    @media (max-width: 640px) {
+      .theme-toggle { top: 1.2rem; right: 1.2rem; width: 44px; height: 44px; }
+      h1 { font-size: 3rem; }
+      .subtitle { font-size: 1.25rem; }
+      .about-card { padding: 1.8rem; }
+      h2 { font-size: 2rem; }
+      .grid { gap: 1.5rem; }
+      .image-frame { width: 140px; height: 140px; }
+      .socials-list { flex-direction: column; align-items: center; gap: 0.8rem; border-radius: 28px; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0 1.25rem; }
+      h1 { font-size: 2.6rem; }
+    }
+
+    /* subtle pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(var(--border-light) 0.8px, transparent 0.8px);
+      background-size: 28px 28px;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header>
+      <button class="theme-toggle" aria-label="switch theme">
+        <i class="fas fa-moon"></i>
+      </button>
+
+      <!-- Profile image block (placeholder) -->
+      <div class="profile-row">
+        <div class="image-frame">
+          <div class="profile-image">
+            <!-- replace with your own image if needed -->
+            <!--  -->
+            <div class="placeholder-icon">
+              <img src="john.png" alt="John Samwel">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h1><span class="gradient-name">John Samwel</span></h1>
+      <div class="subtitle">full stack developer · system builder</div>
+
+      <!-- main socials from header (github/x/linkedin/dribbble) – can stay generic -->
+      <div class="social-links">
+        <a href="https://jnology-what-hub.free.nf" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://jnology-what-hub.free.nf" target="_blank" aria-label="X / Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://jnology-what-hub.free.nf" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://jnology-what-hub.free.nf" target="_blank" aria-label="whatsapp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </header>
+
+    <!-- ========== ABOUT ME – fully personalized ========== -->
+    <section id="about">
+      <h2>💫 about me</h2>
+      <div class="about-content">
+        <div class="about-card">
+
+          <div class="greeting">
+            <i class="fa-regular fa-hand-peace"></i> Hi, I'm John
+          </div>
+          <div class="role-tagline">💻 Full Stack Developer | Problem Solver | System Builder</div>
+
+          <div class="about-description">
+            <p>I design and develop scalable, secure, and high-performance web applications from frontend to backend, plus maintenance and networking.</p>
+            <p>With strong foundations in both client-side and server-side technologies, I transform ideas into fully functional digital solutions. I focus on clean architecture, efficient databases, optimized performance, and user-centered design.</p>
+          </div>
+
+          <!-- 💻 Tech Stack (all items you mentioned) -->
+          <div class="tech-stack-title">
+            <i class="fas fa-code"></i> tech stack
+          </div>
+          <div class="tech-cloud">
+            <span class="tech-item">C++</span>
+            <span class="tech-item">JavaScript</span>
+            <span class="tech-item">HTML5</span>
+            <span class="tech-item">CSS3</span>
+            <span class="tech-item">Python</span>
+            <span class="tech-item">PHP</span>
+            <span class="tech-item">Bash</span>
+            <span class="tech-item">Script</span>
+            <span class="tech-item">Dart</span>
+            <span class="tech-item">Firebase</span>
+            <span class="tech-item">Cloudflare</span>
+            <span class="tech-item">Vultr</span>
+            <span class="tech-item">AWS</span>
+            <span class="tech-item">Oracle</span>
+            <span class="tech-item">Laravel</span>
+            <span class="tech-item">Flutter</span>
+            <span class="tech-item">TailwindCSS</span>
+            <span class="tech-item">Apache</span>
+            <span class="tech-item">Nginx</span>
+            <span class="tech-item">MySQL</span>
+            <span class="tech-item">MariaDB</span>
+            <span class="tech-item">Canva</span>
+            <span class="tech-item">Figma</span>
+            <span class="tech-item">Adobe Illustrator</span>
+            <span class="tech-item">Adobe Lightroom</span>
+            <span class="tech-item">Adobe Photoshop</span>
+            <span class="tech-item">GitHub</span>
+            <span class="tech-item">Git</span>
+          </div>
+
+          <p style="margin-top: 2rem; color: var(--text-muted); font-style: italic; border-left: 3px solid var(--primary); padding-left: 1.2rem;">
+            ⚡ building, debugging, and optimizing from server room to browser console.
+          </p>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>selected work</h2>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-img"><img src="hospital system.jpeg" alt="hospital" width="338.67px"; height="210px" style="background-size: cover;background-repeat: no-repeat;"></div>
+          <div class="card-body">
+            <h3>Hospital· system</h3>
+            <p>Fully typed, accessible component system with radix ui, tailwind, and a token‑based theme engine. used by 6 product teams.</p>
+            <div class="tags">
+              <span class="tag">React</span>
+              <span class="tag">Tailwind</span>
+              <span class="tag">Radix</span>
+              <span class="tag">Storybook</span>
+              <span class="tag">dark/light</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+ <div class="card-img"><img src="student.jpeg" alt="hospital" width="338.67px"; height="210px" style="background-size: cover;background-repeat: no-repeat;"></div>
+          <div class="card-body">
+            <h3>Schooly  Management System</h3>
+            <p>Real‑time Dashbord with websocket streaming, interactive charts, and a modular order book. low‑latency by design.</p>
+            <div class="tags">
+              <span class="tag">PHP</span>
+              <span class="tag">css</span>
+              <span class="tag">Html</span>
+              <span class="tag">SQL</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+   <div class="card-img"><img src="tourism.jpeg" alt="hospital" width="338.67px"; height="210px" style="background-size: cover;background-repeat: no-repeat;"></div>
+          <div class="card-body">
+            <h3>tourism</h3>
+            <p>all atraction with people communication mobile first.</p>
+            <div class="tags">
+              <span class="tag">HTML</span>
+              <span class="tag">Canvas</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">Vite</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 🌐 Socials (exactly as you listed) -->
+          <div class="socials-list">
+            <a href="https://jnology-what-hub.free.nf" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://jnology-what-hub.free.nf" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://linkedin.com/in/john samwel" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="https://jnology-what-hub.free.nf" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
+            <a href="mailto:john@example.com"><i class="fas fa-envelope"></i> email</a>
+          </div>
+
+
+
+    <footer>
+      <p>© 2026 John Samwel — building with intent & curiosity</p>
+    </footer>
+
+  </div>
+
+  <script>
+    (function() {
+      const toggle = document.querySelector('.theme-toggle');
+      const html = document.documentElement;
+
+      // get stored or system preference
+      const stored = localStorage.getItem('theme');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (stored) {
+        html.setAttribute('data-theme', stored);
+      } else {
+        html.setAttribute('data-theme', systemDark ? 'dark' : 'light');
+      }
+
+      const updateIcon = () => {
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        toggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+      };
+      updateIcon();
+
+      toggle.addEventListener('click', () => {
+        const current = html.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateIcon();
+      });
+
+      // listen to system changes if no local storage
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (!localStorage.getItem('theme')) {
+          html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+          updateIcon();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
